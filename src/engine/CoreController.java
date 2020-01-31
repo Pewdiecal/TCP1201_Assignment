@@ -1,13 +1,12 @@
 package engine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class CoreController {
-    private static ArrayList<Card> pile_c = new ArrayList<>();
-    private static ArrayList<Card> pile_d = new ArrayList<>();
-    private static ArrayList<Card> pile_h = new ArrayList<>();
-    private static ArrayList<Card> pile_s = new ArrayList<>();
+
     private static ArrayList<Card> c1 = new ArrayList<>();
     private static ArrayList<Card> c2 = new ArrayList<>();
     private static ArrayList<Card> c3 = new ArrayList<>();
@@ -17,97 +16,123 @@ public class CoreController {
     private static ArrayList<Card> c7 = new ArrayList<>();
     private static ArrayList<Card> c8 = new ArrayList<>();
     private static ArrayList<Card> c9 = new ArrayList<>();
+    private static ArrayList<Card> cardCollections = new ArrayList<>();
+    private static HashMap<Card, ArrayList<Card>> positionRec = new HashMap<>();
+    private static ArrayList<ArrayList<Card>> listOfColumns = new ArrayList<>();
 
-    CoreController() {
+    static {
+        initColumnArray();
         createCards();
-        Collections.shuffle(pile_c);
+        Collections.shuffle(c9);
         distributeCards();
     }
 
+    private static void initColumnArray() {
+        listOfColumns.add(c1);
+        listOfColumns.add(c2);
+        listOfColumns.add(c3);
+        listOfColumns.add(c4);
+        listOfColumns.add(c5);
+        listOfColumns.add(c6);
+        listOfColumns.add(c7);
+        listOfColumns.add(c8);
+        listOfColumns.add(c9);
+    }
+
     private static void createCards() {
-        char[] cardSuits = {'A', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'X', 'J', 'Q', 'K'};
+        String[] cardSuits = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "X", "J", "Q", "K"};
 
         for (int i = 0; i < 4; i++) {
 
             for (int r = 0; r < cardSuits.length; r++) {
-
                 if (i == 0) {
-                    pile_c.add(new Card(cardSuits[r], r + 1, 'c'));
+                    c9.add(new Card(cardSuits[r], r + 1, "c", OrderedStack.getListOfPiles().get(0)));
+
                 } else if (i == 1) {
-                    pile_c.add(new Card(cardSuits[r], r + 1, 'd'));
+                    c9.add(new Card(cardSuits[r], r + 1, "d", OrderedStack.getListOfPiles().get(1)));
+
                 } else if (i == 2) {
-                    pile_c.add(new Card(cardSuits[r], r + 1, 'h'));
+                    c9.add(new Card(cardSuits[r], r + 1, "h", OrderedStack.getListOfPiles().get(2)));
+
                 } else {
-                    pile_c.add(new Card(cardSuits[r], r + 1, 's'));
+                    c9.add(new Card(cardSuits[r], r + 1, "s", OrderedStack.getListOfPiles().get(3)));
+
                 }
             }
 
         }
+
+        for (ArrayList<Card> list : listOfColumns) {
+            cardCollections.addAll(list);
+        }
     }
 
-    public static void distributeCards(){
-        for(Card cards: pile_c){
-            if(pile_c.indexOf(cards) <= 6){
+    public static void distributeCards() {
+        for (Card cards : c9) {
+            if (c9.indexOf(cards) <= 6) {
                 c1.add(cards);
-            } else if(pile_c.indexOf(cards) <= 13){
+                positionRec.put(cards, c1);
+            } else if (c9.indexOf(cards) <= 13) {
                 c2.add(cards);
-            } else if(pile_c.indexOf(cards) <= 20){
+                positionRec.put(cards, c2);
+            } else if (c9.indexOf(cards) <= 20) {
                 c3.add(cards);
-            } else if(pile_c.indexOf(cards) <= 27){
+                positionRec.put(cards, c3);
+            } else if (c9.indexOf(cards) <= 27) {
                 c4.add(cards);
-            } else if(pile_c.indexOf(cards) <= 33){
+                positionRec.put(cards, c4);
+            } else if (c9.indexOf(cards) <= 33) {
                 c5.add(cards);
-            } else if(pile_c.indexOf(cards) <= 39){
+                positionRec.put(cards, c5);
+            } else if (c9.indexOf(cards) <= 39) {
                 c6.add(cards);
-            } else if(pile_c.indexOf(cards) <= 45){
+                positionRec.put(cards, c6);
+            } else if (c9.indexOf(cards) <= 45) {
                 c7.add(cards);
-            } else if(pile_c.indexOf(cards) <= 51){
+                positionRec.put(cards, c7);
+            } else if (c9.indexOf(cards) <= 51) {
                 c8.add(cards);
+                positionRec.put(cards, c8);
             }
         }
-        pile_c.clear();
+        c9.clear();
     }
 
-    public static void moveCard(Card card, ArrayList<Card> insertTo){
+    public static void moveToColumn(Card card, ArrayList<Card> insertTo) throws NullPointerException, RuleViolationException {
 
         ArrayList<Card> c;
-        c = searchCard(card);
+        c = positionRec.get(card);
 
-        if(c != null){
-            if(insertTo.get(insertTo.size() - 1).compareTo(card) > 0){
+        if (!insertTo.isEmpty()) {
+            if (insertTo.get(insertTo.size() - 1).compareTo(card) < 0) {
                 insertTo.add(card);
                 c.remove(card);
+            } else {
+                throw new RuleViolationException("Game rules violated.");
             }
+        } else {
+            insertTo.add(card);
+            c.remove(card);
         }
+
 
     }
 
-    private static ArrayList<Card> searchCard(Card card){
-        if(c1.contains(card)){
-            return c1;
-        }
-        if(c2.contains(card)){
-            return c2;
-        }
-        if(c3.contains(card)){
-            return c3;
-        }
-        if(c4.contains(card)){
-            return c4;
-        }
-        if(c5.contains(card)){
-            return c5;
-        }
-        if(c6.contains(card)){
-            return c6;
-        }
-        if(c7.contains(card)){
-            return c7;
-        }
-        if(c8.contains(card)){
-            return c8;
-        }
-        return null;
+    public static void swapCard(ArrayList<Card> column) {
+        column.add(0, column.remove(column.size() - 1));
+    }
+
+    public static ArrayList<Card> getCardCollections() {
+        return cardCollections;
+    }
+
+    public static ArrayList<ArrayList<Card>> getColumnList() {
+        return listOfColumns;
+    }
+
+    public static boolean isGameFinished() {
+
+        return c1.isEmpty() && c2.isEmpty() && c3.isEmpty() && c4.isEmpty() && c5.isEmpty() && c6.isEmpty() && c7.isEmpty() && c8.isEmpty() && c9.isEmpty();
     }
 
 }

@@ -1,33 +1,42 @@
 package engine;
 
-public class Card implements Comparable<Card>{
+import java.util.Stack;
 
-    private char suit;
+public class Card implements Comparable<Card> {
+
+    private String suit;
     private int rank;
-    private char pile;
+    private String pile;
+    private Stack<Card> stackRef;
 
-    Card(char suit, int rank, char pile){
+    Card(String suit, int rank, String pile, Stack<Card> stackRef) {
         this.suit = suit;
         this.rank = rank;
         this.pile = pile;
+        this.stackRef = stackRef;
     }
 
-    public char getSuit(){
+    public String getSuit() {
         return this.suit;
     }
 
-    public int getRank(){
-        return this.rank;
+    public String getPile() {
+        return this.pile;
     }
 
-    public char getPile(){
-        return this.pile;
+    public Stack<Card> getStackRef() {
+        return this.stackRef;
     }
 
     @Override
     public int compareTo(Card o) {
-
-        return 0;
+        if (this.rank + 1 == o.rank) {
+            return 1;
+        } else if (this.rank - 1 == o.rank) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 
 }
