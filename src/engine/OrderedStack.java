@@ -22,23 +22,29 @@ public class OrderedStack {
         listOfPiles.add(pile_s);
     }
 
-    //TODO : Remove cards from columns after add to pile
+    //TODO : move multiple cards
+    //TODO : if stack empty rank must 0 + 1
     public static void pushToPile(Card cards, Stack<Card> pile) throws RuleViolationException {
 
-        if(!pile.empty()){
-            if (cards.compareTo(cards.getStackRef().peek()) > 0 && pile == cards.getStackRef()) {
+        if (!pile.empty()) {
+            if (pile.peek().compareTo(cards) > 0 && pile == cards.getStackRef()) {
                 cards.getStackRef().push(cards);
+
+                CoreController.removeCard(cards);
+
             } else {
                 throw new RuleViolationException("Game rules violated.");
             }
-        } else{
-            if(pile == cards.getStackRef()){
+        } else {
+            if (pile == cards.getStackRef()) {
                 cards.getStackRef().push(cards);
+
+                CoreController.removeCard(cards);
+
             } else {
                 throw new RuleViolationException("Game rules violated.");
             }
         }
-
 
     }
 

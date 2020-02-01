@@ -1,7 +1,6 @@
 package engine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -98,23 +97,93 @@ public class CoreController {
         c9.clear();
     }
 
+    //TODO : auto push to pile if column in order with 1 single pile.
     public static void moveToColumn(Card card, ArrayList<Card> insertTo) throws NullPointerException, RuleViolationException {
 
-        ArrayList<Card> c;
-        c = positionRec.get(card);
+        ArrayList<Card> tempCardList = new ArrayList<>();
 
-        if (!insertTo.isEmpty()) {
-            if (insertTo.get(insertTo.size() - 1).compareTo(card) < 0) {
-                insertTo.add(card);
-                c.remove(card);
-            } else {
-                throw new RuleViolationException("Game rules violated.");
+        // if index is not last
+        if (positionRec.get(card).indexOf(card) != positionRec.get(card).size() - 1) {
+
+            // check if order is correct in column before transfer
+            for (int i = positionRec.get(card).indexOf(card); i < positionRec.get(card).size(); i++) {
+                if (i + 1 != positionRec.get(card).size()) {
+                    if (positionRec.get(card).get(i).compareTo(positionRec.get(card).get(i + 1)) < 0) {
+                        tempCardList.add(positionRec.get(card).get(i));
+                    } else {
+                        tempCardList.clear();
+                        throw new RuleViolationException("Game rules violated.");
+                    }
+                } else {
+                    tempCardList.add(positionRec.get(card).get(i));
+                }
             }
+
+            // compare last index of insertTo with 1st index of tempCardList
+            if (!insertTo.isEmpty()) {
+                if (tempCardList.size() != 0 && insertTo.get(insertTo.size() - 1).compareTo(tempCardList.get(0)) < 0) {
+                    insertTo.addAll(tempCardList);
+
+                    for (Card listCards : tempCardList) {
+                        removeCard(listCards);
+                    }
+
+                } else {
+                    tempCardList.clear();
+                    throw new RuleViolationException("Game rules violated.");
+                }
+
+            } else {
+                if (tempCardList.size() != 0) {
+                    insertTo.addAll(tempCardList);
+
+                    for (Card listCards : tempCardList) {
+                        removeCard(listCards);
+                    }
+
+                }
+            }
+
         } else {
-            insertTo.add(card);
-            c.remove(card);
+
+            if (!insertTo.isEmpty()) {
+                if (insertTo.get(insertTo.size() - 1).compareTo(card) < 0) {
+                    insertTo.add(card);
+                    removeCard(card);
+                } else {
+                    throw new RuleViolationException("Game rules violated.");
+                }
+            } else {
+                insertTo.add(card);
+                removeCard(card);
+            }
         }
 
+
+    }
+
+    public static void removeCard(Card card) {
+        ArrayList<Card> c;
+        c = positionRec.get(card);
+        c.remove(card);
+        updatePositionRec(card);
+    }
+
+    private static void updatePositionRec(Card cards) {
+        boolean isCardAtPile = true;
+        for (ArrayList<Card> list : CoreController.getColumnList()) {
+            for (Card searchedCard : list) {
+                if (searchedCard == cards) {
+                    isCardAtPile = false;
+                    positionRec.replace(cards, list);
+                    break;
+                }
+            }
+        }
+
+        if (isCardAtPile) {
+            positionRec.remove(cards);
+        }
 
     }
 
