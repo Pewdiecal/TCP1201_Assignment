@@ -5,6 +5,7 @@ import engine.CoreController;
 import engine.OrderedStack;
 import engine.RuleViolationException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
@@ -18,21 +19,26 @@ public class CLI {
 
         CLI cli = new CLI();
 
+        String inputRaw;
+        String[] commands;
+
         while (!CoreController.isGameFinished()) {
 
             cli.printPiles();
             cli.printColumns();
 
-            String inputRaw = in.nextLine();
-            String[] commands = inputRaw.split(" ");
+            inputRaw = in.nextLine();
+            commands = inputRaw.split(" ");
 
             if (commands.length == 1) {
 
-                int columnNum = 0;
+                int columnNum;
                 try {
                     columnNum = Integer.parseInt(commands[0]);
                 } catch (NumberFormatException ex) {
                     System.out.println("Invalid column input.");
+                    cli.pause();
+                    continue;
                 }
                 CoreController.swapCard(CoreController.getColumnList().get(columnNum - 1));
 
@@ -46,6 +52,7 @@ public class CLI {
                     sourceColumn = Integer.parseInt(commands[0]);
                 } catch (NumberFormatException ex) {
                     System.out.println("Column not exists.");
+                    cli.pause();
                     continue;
                 }
 
@@ -68,6 +75,7 @@ public class CLI {
                             break;
                         default:
                             System.out.println("Invalid pile destination.");
+                            cli.pause();
                             continue;
                     }
 
@@ -86,11 +94,13 @@ public class CLI {
                     if (cardObj != null) {
                         if (!CoreController.getColumnList().get(sourceColumn - 1).contains(cardObj)) {
                             System.out.println("Card not exists in source column " + sourceColumn);
+                            cli.pause();
                             continue;
                         }
 
                     } else {
                         System.out.println("Card not exists.");
+                        cli.pause();
                         continue;
                     }
 
@@ -100,6 +110,7 @@ public class CLI {
                             CoreController.moveToColumn(cardObj, CoreController.getColumnList().get(destinationColumn - 1));
                         } catch (RuleViolationException e) {
                             System.out.println(e.getMessage());
+                            cli.pause();
                         }
 
                     } else if (destinationPile >= 0) {
@@ -107,16 +118,19 @@ public class CLI {
                             OrderedStack.pushToPile(cardObj, OrderedStack.getListOfPiles().get(destinationPile));
                         } catch (RuleViolationException e) {
                             System.out.println(e.getMessage());
+                            cli.pause();
                         }
                     }
 
 
                 } else {
                     System.out.println("Card not exists.");
+                    cli.pause();
                 }
 
             } else {
                 System.out.println("Invalid command");
+                cli.pause();
             }
 
         }
@@ -166,6 +180,16 @@ public class CLI {
             }
         }
 
+    }
+
+    public void pause(){
+        System.out.println("PRESS ENTER KEY TO CONTINUE...");
+        int dump;
+        try {
+           dump =  System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
