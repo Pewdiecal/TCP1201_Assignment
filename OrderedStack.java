@@ -88,6 +88,10 @@ public class OrderedStack {
 
         } else {
 
+            if(card.getStackRef() != toPile){
+                throw new RuleViolationException("Selected cards does not match the specified pile.");
+            }
+
             if (!toPile.empty()) {
 
                 if (toPile.peek().compareTo(card) > 0 && toPile == card.getStackRef()) {
