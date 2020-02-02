@@ -23,42 +23,47 @@ public class OrderedStack {
         listOfPiles.add(pile_s);
     }
 
+    public static void pushToPile(Card card, Stack<Card> toPile) throws RuleViolationException {
 
-    public static void pushToPile(Card cards, Stack<Card> pile) throws RuleViolationException {
-
-        if (CoreController.getCardColumn(cards).indexOf(cards) != CoreController.getCardColumn(cards).size() - 1) {
-            ArrayList<Card> tempCardList = CoreController.checkCardOrder(cards);
+        if (CoreController.getCardColumn(card).indexOf(card) != CoreController.getCardColumn(card).size() - 1) {
+            ArrayList<Card> tempCardList = CoreController.checkCardOrder(card);
 
             if (tempCardList != null) {
 
-                for(Card card:tempCardList){
-                    if(card.getStackRef() != pile){
+                for (Card listCard : tempCardList) {
+                    if (listCard.getStackRef() != toPile) {
                         throw new RuleViolationException("Selected cards does not match its own specific pile.");
                     }
                 }
 
                 tempCardList.sort(Collections.reverseOrder());
-                if(!pile.empty()){
 
-                    if (pile.peek().compareTo(tempCardList.get(0)) > 0) {
-                        for(Card card:tempCardList){
-                            cards.getStackRef().push(card);
-                            CoreController.removeCard(card);
+                if (!toPile.empty()) {
+
+                    if (toPile.peek().compareTo(tempCardList.get(0)) > 0) {
+
+                        for (Card listCard : tempCardList) {
+                            listCard.getStackRef().push(listCard);
+                            CoreController.removeCard(listCard);
                         }
+
                     } else {
                         throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: Card suits need to be in ascending order.");
                     }
 
                 } else {
+
                     if (tempCardList.get(0).getRank() == 1) {
-                        for(Card card:tempCardList){
-                            cards.getStackRef().push(card);
-                            CoreController.removeCard(card);
+
+                        for (Card listCard : tempCardList) {
+                            listCard.getStackRef().push(listCard);
+                            CoreController.removeCard(listCard);
                         }
 
                     } else {
                         throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: The first card needs to have suit A.");
                     }
+
                 }
 
 
@@ -68,25 +73,26 @@ public class OrderedStack {
 
         } else {
 
-            if (!pile.empty()) {
-                if (pile.peek().compareTo(cards) > 0 && pile == cards.getStackRef()) {
-                    cards.getStackRef().push(cards);
+            if (!toPile.empty()) {
 
-                    CoreController.removeCard(cards);
+                if (toPile.peek().compareTo(card) > 0 && toPile == card.getStackRef()) {
+                    card.getStackRef().push(card);
+                    CoreController.removeCard(card);
 
                 } else {
                     throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: Card suits need to be in ascending order.");
                 }
+
             } else {
 
-                if (pile == cards.getStackRef() && cards.getRank() == 1) {
-                    cards.getStackRef().push(cards);
-
-                    CoreController.removeCard(cards);
+                if (toPile == card.getStackRef() && card.getRank() == 1) {
+                    card.getStackRef().push(card);
+                    CoreController.removeCard(card);
 
                 } else {
                     throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: The first card needs to start with suit A.");
                 }
+
             }
 
         }

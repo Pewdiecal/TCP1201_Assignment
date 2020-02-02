@@ -68,47 +68,47 @@ public class CoreController {
     }
 
     public static void distributeCards() {
-        for (Card cards : c9) {
-            if (c9.indexOf(cards) <= 6) {
-                c1.add(cards);
-                positionRec.put(cards, c1);
-            } else if (c9.indexOf(cards) <= 13) {
-                c2.add(cards);
-                positionRec.put(cards, c2);
-            } else if (c9.indexOf(cards) <= 20) {
-                c3.add(cards);
-                positionRec.put(cards, c3);
-            } else if (c9.indexOf(cards) <= 27) {
-                c4.add(cards);
-                positionRec.put(cards, c4);
-            } else if (c9.indexOf(cards) <= 33) {
-                c5.add(cards);
-                positionRec.put(cards, c5);
-            } else if (c9.indexOf(cards) <= 39) {
-                c6.add(cards);
-                positionRec.put(cards, c6);
-            } else if (c9.indexOf(cards) <= 45) {
-                c7.add(cards);
-                positionRec.put(cards, c7);
-            } else if (c9.indexOf(cards) <= 51) {
-                c8.add(cards);
-                positionRec.put(cards, c8);
+        for (Card card : c9) {
+            if (c9.indexOf(card) <= 6) {
+                c1.add(card);
+                positionRec.put(card, c1);
+            } else if (c9.indexOf(card) <= 13) {
+                c2.add(card);
+                positionRec.put(card, c2);
+            } else if (c9.indexOf(card) <= 20) {
+                c3.add(card);
+                positionRec.put(card, c3);
+            } else if (c9.indexOf(card) <= 27) {
+                c4.add(card);
+                positionRec.put(card, c4);
+            } else if (c9.indexOf(card) <= 33) {
+                c5.add(card);
+                positionRec.put(card, c5);
+            } else if (c9.indexOf(card) <= 39) {
+                c6.add(card);
+                positionRec.put(card, c6);
+            } else if (c9.indexOf(card) <= 45) {
+                c7.add(card);
+                positionRec.put(card, c7);
+            } else if (c9.indexOf(card) <= 51) {
+                c8.add(card);
+                positionRec.put(card, c8);
             }
         }
         c9.clear();
     }
 
-    //TODO : auto push to pile if column in order with 1 single pile.
-    public static void moveToColumn(Card card, ArrayList<Card> insertTo) throws NullPointerException, RuleViolationException {
+
+    public static void moveToColumn(Card card, ArrayList<Card> insertToCol) throws NullPointerException, RuleViolationException {
 
         // if index is not last
         if (positionRec.get(card).indexOf(card) != positionRec.get(card).size() - 1) {
             ArrayList<Card> tempCardList = checkCardOrder(card);
-            if(tempCardList != null) {
-                // compare last index of insertTo with 1st index of tempCardList
-                if (!insertTo.isEmpty()) {
-                    if (tempCardList.size() != 0 && insertTo.get(insertTo.size() - 1).compareTo(tempCardList.get(0)) < 0) {
-                        insertTo.addAll(tempCardList);
+            if (tempCardList != null) {
+                // compare last index of insertToCol with 1st index of tempCardList
+                if (!insertToCol.isEmpty()) {
+                    if (tempCardList.size() != 0 && insertToCol.get(insertToCol.size() - 1).compareTo(tempCardList.get(0)) < 0) {
+                        insertToCol.addAll(tempCardList);
 
                         for (Card listCards : tempCardList) {
                             removeCard(listCards);
@@ -121,10 +121,10 @@ public class CoreController {
 
                 } else {
                     if (tempCardList.size() != 0) {
-                        insertTo.addAll(tempCardList);
+                        insertToCol.addAll(tempCardList);
 
-                        for (Card listCards : tempCardList) {
-                            removeCard(listCards);
+                        for (Card listCard : tempCardList) {
+                            removeCard(listCard);
                         }
 
                     }
@@ -134,15 +134,15 @@ public class CoreController {
             }
         } else {
 
-            if (!insertTo.isEmpty()) {
-                if (insertTo.get(insertTo.size() - 1).compareTo(card) < 0) {
-                    insertTo.add(card);
+            if (!insertToCol.isEmpty()) {
+                if (insertToCol.get(insertToCol.size() - 1).compareTo(card) < 0) {
+                    insertToCol.add(card);
                     removeCard(card);
                 } else {
                     throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: Card suits need to be in descending order.");
                 }
             } else {
-                insertTo.add(card);
+                insertToCol.add(card);
                 removeCard(card);
             }
         }
@@ -156,20 +156,20 @@ public class CoreController {
         updatePositionRec(card);
     }
 
-    private static void updatePositionRec(Card cards) {
+    private static void updatePositionRec(Card card) {
         boolean isCardAtPile = true;
         for (ArrayList<Card> list : CoreController.getColumnList()) {
             for (Card searchedCard : list) {
-                if (searchedCard == cards) {
+                if (searchedCard == card) {
                     isCardAtPile = false;
-                    positionRec.replace(cards, list);
+                    positionRec.replace(card, list);
                     break;
                 }
             }
         }
 
         if (isCardAtPile) {
-            positionRec.remove(cards);
+            positionRec.remove(card);
         }
 
     }
@@ -178,7 +178,7 @@ public class CoreController {
         column.add(0, column.remove(column.size() - 1));
     }
 
-    public static ArrayList<Card> checkCardOrder(Card card){
+    public static ArrayList<Card> checkCardOrder(Card card) {
 
         ArrayList<Card> tempCardList = new ArrayList<>();
         // check if order is correct in column before transfer
@@ -207,7 +207,7 @@ public class CoreController {
         return listOfColumns;
     }
 
-    public static ArrayList<Card> getCardColumn(Card card){
+    public static ArrayList<Card> getCardColumn(Card card) {
         return positionRec.get(card);
     }
 
@@ -216,11 +216,11 @@ public class CoreController {
         return c1.isEmpty() && c2.isEmpty() && c3.isEmpty() && c4.isEmpty() && c5.isEmpty() && c6.isEmpty() && c7.isEmpty() && c8.isEmpty() && c9.isEmpty();
     }
 
-    public static void restartGame(){
-        for(ArrayList<Card> columns:getColumnList()){
+    public static void restartGame() {
+        for (ArrayList<Card> columns : getColumnList()) {
             columns.clear();
         }
-        for(Stack<Card> pile:OrderedStack.getListOfPiles()){
+        for (Stack<Card> pile : OrderedStack.getListOfPiles()) {
             pile.clear();
         }
         positionRec.clear();
@@ -228,10 +228,6 @@ public class CoreController {
         createCards();
         Collections.shuffle(c9);
         distributeCards();
-    }
-
-    public static void autoSolve(){
-        
     }
 
 }
