@@ -24,6 +24,10 @@ public class Card implements Comparable<Card> {
         return this.pile;
     }
 
+    public int getRank(){
+        return this.rank;
+    }
+
     public Stack<Card> getStackRef() {
         return this.stackRef;
     }

@@ -100,50 +100,37 @@ public class CoreController {
     //TODO : auto push to pile if column in order with 1 single pile.
     public static void moveToColumn(Card card, ArrayList<Card> insertTo) throws NullPointerException, RuleViolationException {
 
-        ArrayList<Card> tempCardList = new ArrayList<>();
-
         // if index is not last
         if (positionRec.get(card).indexOf(card) != positionRec.get(card).size() - 1) {
+            ArrayList<Card> tempCardList = checkCardOrder(card);
+            if(tempCardList != null) {
+                // compare last index of insertTo with 1st index of tempCardList
+                if (!insertTo.isEmpty()) {
+                    if (tempCardList.size() != 0 && insertTo.get(insertTo.size() - 1).compareTo(tempCardList.get(0)) < 0) {
+                        insertTo.addAll(tempCardList);
 
-            // check if order is correct in column before transfer
-            for (int i = positionRec.get(card).indexOf(card); i < positionRec.get(card).size(); i++) {
-                if (i + 1 != positionRec.get(card).size()) {
-                    if (positionRec.get(card).get(i).compareTo(positionRec.get(card).get(i + 1)) < 0) {
-                        tempCardList.add(positionRec.get(card).get(i));
+                        for (Card listCards : tempCardList) {
+                            removeCard(listCards);
+                        }
+
                     } else {
                         tempCardList.clear();
-                        throw new RuleViolationException("Game rules violated.");
-                    }
-                } else {
-                    tempCardList.add(positionRec.get(card).get(i));
-                }
-            }
-
-            // compare last index of insertTo with 1st index of tempCardList
-            if (!insertTo.isEmpty()) {
-                if (tempCardList.size() != 0 && insertTo.get(insertTo.size() - 1).compareTo(tempCardList.get(0)) < 0) {
-                    insertTo.addAll(tempCardList);
-
-                    for (Card listCards : tempCardList) {
-                        removeCard(listCards);
+                        throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: Card suit need to be in descending order.");
                     }
 
                 } else {
-                    tempCardList.clear();
-                    throw new RuleViolationException("Game rules violated.");
-                }
+                    if (tempCardList.size() != 0) {
+                        insertTo.addAll(tempCardList);
 
+                        for (Card listCards : tempCardList) {
+                            removeCard(listCards);
+                        }
+
+                    }
+                }
             } else {
-                if (tempCardList.size() != 0) {
-                    insertTo.addAll(tempCardList);
-
-                    for (Card listCards : tempCardList) {
-                        removeCard(listCards);
-                    }
-
-                }
+                throw new RuleViolationException("Invalid move.");
             }
-
         } else {
 
             if (!insertTo.isEmpty()) {
@@ -151,14 +138,13 @@ public class CoreController {
                     insertTo.add(card);
                     removeCard(card);
                 } else {
-                    throw new RuleViolationException("Game rules violated.");
+                    throw new RuleViolationException("Card arrangement does not follow the rule.\nNOTE: Card suits need to be in descending order.");
                 }
             } else {
                 insertTo.add(card);
                 removeCard(card);
             }
         }
-
 
     }
 
@@ -191,12 +177,37 @@ public class CoreController {
         column.add(0, column.remove(column.size() - 1));
     }
 
+    public static ArrayList<Card> checkCardOrder(Card card){
+
+        ArrayList<Card> tempCardList = new ArrayList<>();
+        // check if order is correct in column before transfer
+        for (int i = positionRec.get(card).indexOf(card); i < positionRec.get(card).size(); i++) {
+            if (i + 1 != positionRec.get(card).size()) {
+                if (positionRec.get(card).get(i).compareTo(positionRec.get(card).get(i + 1)) < 0) {
+                    tempCardList.add(positionRec.get(card).get(i));
+                } else {
+                    //if rules are violated.
+                    tempCardList.clear();
+                    return null;
+                }
+            } else {
+                tempCardList.add(positionRec.get(card).get(i));
+            }
+        }
+
+        return tempCardList;
+    }
+
     public static ArrayList<Card> getCardCollections() {
         return cardCollections;
     }
 
     public static ArrayList<ArrayList<Card>> getColumnList() {
         return listOfColumns;
+    }
+
+    public static ArrayList<Card> getCardColumn(Card card){
+        return positionRec.get(card);
     }
 
     public static boolean isGameFinished() {
