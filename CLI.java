@@ -45,6 +45,7 @@ public class CLI {
                 int columnNum;
                 try {
                     columnNum = Integer.parseInt(commands[0]);
+                    CoreController.swapCard(CoreController.getColumnList().get(columnNum - 1));
                 } catch (NumberFormatException ex) {
 
                     if (commands[0].toUpperCase().equals("X")) {
@@ -63,8 +64,11 @@ public class CLI {
                         continue;
                     }
 
+                } catch (IndexOutOfBoundsException e){
+                    System.out.println("Invalid column input.");
+                    cli.pause();
+                    continue;
                 }
-                CoreController.swapCard(CoreController.getColumnList().get(columnNum - 1));
 
             } else if (commands.length == 3) {
                 int sourceColumn;
