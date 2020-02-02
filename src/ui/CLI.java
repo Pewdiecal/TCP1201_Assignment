@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
-
 public class CLI {
 
     public static void main(String[] args) {
@@ -51,7 +50,7 @@ public class CLI {
                 try {
                     sourceColumn = Integer.parseInt(commands[0]);
                 } catch (NumberFormatException ex) {
-                    System.out.println("Column not exists.");
+                    System.out.println("Source column not exists.");
                     cli.pause();
                     continue;
                 }
@@ -93,7 +92,7 @@ public class CLI {
                     //after card found
                     if (cardObj != null) {
                         if (!CoreController.getColumnList().get(sourceColumn - 1).contains(cardObj)) {
-                            System.out.println("Card not exists in source column " + sourceColumn);
+                            System.out.println("Card "+ commands[1] +" does not exists in source column " + sourceColumn);
                             cli.pause();
                             continue;
                         }
@@ -134,6 +133,9 @@ public class CLI {
             }
 
         }
+
+        cli.printPiles();
+        cli.printColumns();
 
     }
 
@@ -183,7 +185,8 @@ public class CLI {
     }
 
     public void pause(){
-        System.out.println("PRESS ENTER KEY TO CONTINUE...");
+
+        System.out.println("\nPRESS ENTER KEY TO CONTINUE...");
         int dump;
         try {
            dump =  System.in.read();
