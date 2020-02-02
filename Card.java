@@ -1,4 +1,5 @@
 import java.util.Stack;
+
 /**
  * Card is a class that defines the characteristic of a poker card.
  *
@@ -14,9 +15,10 @@ public class Card implements Comparable<Card> {
 
     /**
      * To initialize the properties of a poker card.
-     * @param suit Card suit
-     * @param rank Card ranking
-     * @param pile A pile that a card belongs to
+     *
+     * @param suit     Card suit
+     * @param rank     Card ranking
+     * @param pile     A pile that a card belongs to
      * @param stackRef A reference to the stack which the will be stored on
      */
     Card(String suit, int rank, String pile, Stack<Card> stackRef) {
@@ -28,6 +30,7 @@ public class Card implements Comparable<Card> {
 
     /**
      * Return the suit of a card
+     *
      * @return String suit of a card
      */
     public String getSuit() {
@@ -36,6 +39,7 @@ public class Card implements Comparable<Card> {
 
     /**
      * Return the pile of a card
+     *
      * @return String pile of a card
      */
     public String getPile() {
@@ -44,14 +48,16 @@ public class Card implements Comparable<Card> {
 
     /**
      * Return the rank of a card
+     *
      * @return int rank of a card
      */
-    public int getRank(){
+    public int getRank() {
         return this.rank;
     }
 
     /**
      * Return the stack reference to a stack of a card
+     *
      * @return Stack reference of a card which the card will be stored on later
      */
     public Stack<Card> getStackRef() {
@@ -60,6 +66,7 @@ public class Card implements Comparable<Card> {
 
     /**
      * Compare if the card is in ascending or descending order.
+     *
      * @return the value 1 if this Card rank is in ascending order; a value less than -1 if this Card rank is in descending order.
      */
     @Override

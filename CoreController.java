@@ -27,7 +27,7 @@ public class CoreController {
     private static HashMap<Card, ArrayList<Card>> positionRec = new HashMap<>();
     private static ArrayList<ArrayList<Card>> listOfColumns = new ArrayList<>();
 
-    CoreController(){
+    CoreController() {
 
     }
 
@@ -111,11 +111,12 @@ public class CoreController {
     }
 
     /**
-    * To move card object from column to column
-    * @param card Card object that needs to be moved
-    * @param insertToCol ArrayList referencing the destination column
-    * @throws RuleViolationException If the card passed into the column violate the move rules
-    */
+     * To move card object from column to column
+     *
+     * @param card        Card object that needs to be moved
+     * @param insertToCol ArrayList referencing the destination column
+     * @throws RuleViolationException If the card passed into the column violate the move rules
+     */
     public static void moveToColumn(Card card, ArrayList<Card> insertToCol) throws RuleViolationException {
 
         // if index is not last
@@ -167,9 +168,10 @@ public class CoreController {
     }
 
     /**
-    * Removes the card object from the source column
-    * @param card Card object that needs to be removed
-    */
+     * Removes the card object from the source column
+     *
+     * @param card Card object that needs to be removed
+     */
     public static void removeCard(Card card) {
         ArrayList<Card> c;
         c = positionRec.get(card);
@@ -196,18 +198,20 @@ public class CoreController {
     }
 
     /**
-    * To move the card object inside the column.
-    * @param column Column that needs to be swapped
-    */
+     * To move the card object inside the column.
+     *
+     * @param column Column that needs to be swapped
+     */
     public static void swapCard(ArrayList<Card> column) {
         column.add(0, column.remove(column.size() - 1));
     }
 
     /**
-    * To check start from the index of selected cards object are in descending order until the last index inside a column.
-    * @param card Selected card object from a column.
-    * @return ArrayList of the card object from the selected index until the last index.
-    */
+     * To check start from the index of selected cards object are in descending order until the last index inside a column.
+     *
+     * @param card Selected card object from a column.
+     * @return ArrayList of the card object from the selected index until the last index.
+     */
     public static ArrayList<Card> checkCardOrder(Card card) {
 
         ArrayList<Card> tempCardList = new ArrayList<>();
@@ -230,23 +234,26 @@ public class CoreController {
     }
 
     /**
-    * Return all the object of cards
-    * @return ArrayList contains all the cards
-    */
+     * Return all the object of cards
+     *
+     * @return ArrayList contains all the cards
+     */
     public static ArrayList<Card> getCardCollections() {
         return cardCollections;
     }
 
     /**
-    * Return all the column's reference
-    * @return ArrayList contains all the references to columns
-    */
+     * Return all the column's reference
+     *
+     * @return ArrayList contains all the references to columns
+     */
     public static ArrayList<ArrayList<Card>> getColumnList() {
         return listOfColumns;
     }
 
     /**
      * Return the card object's current column reference
+     *
      * @param card Card object that wants to be searched
      * @return The card object's current column reference
      */
@@ -256,6 +263,7 @@ public class CoreController {
 
     /**
      * Check if the game has finished
+     *
      * @return true If the game is finished
      */
     public static boolean isGameFinished() {

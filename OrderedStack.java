@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
+
 /**
  * OrderedStack is a class that handles the rules of cards being pushed into a stack.
  *
@@ -15,9 +16,10 @@ public class OrderedStack {
     private static Stack<Card> pile_s = new Stack<>();
     private static ArrayList<Stack<Card>> listOfPiles = new ArrayList<>();
 
-    OrderedStack(){
+    OrderedStack() {
 
     }
+
     static {
         initPiles();
     }
@@ -32,10 +34,10 @@ public class OrderedStack {
     /**
      * Push card object to a pile from a column.
      *
-     * @param card Card object that want to be pushed into a pile
+     * @param card   Card object that want to be pushed into a pile
      * @param toPile Reference to a pile destination
      * @throws RuleViolationException If the move violates the rule
-    */
+     */
     public static void pushToPile(Card card, Stack<Card> toPile) throws RuleViolationException {
 
         if (CoreController.getCardColumn(card).indexOf(card) != CoreController.getCardColumn(card).size() - 1) {
@@ -111,8 +113,10 @@ public class OrderedStack {
         }
 
     }
+
     /**
      * Return all the references of stacks.
+     *
      * @return ArrayList contains all the references of stacks
      */
     public static ArrayList<Stack<Card>> getListOfPiles() {

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
+
 /**
  * CLI is a class that displays all the necessary information in the form of commandline interface on to a console.
  * It also check and handles all the user input from the user.
@@ -11,13 +12,13 @@ import java.util.Stack;
  */
 public class CLI {
 
-    CLI(){
+    CLI() {
 
     }
 
     /**
-     *
      * Start to display all the information.
+     *
      * @param args nothing
      */
     public static void main(String[] args) {
