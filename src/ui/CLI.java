@@ -7,7 +7,6 @@ import engine.RuleViolationException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -43,7 +42,7 @@ public class CLI {
                         System.out.println();
                         System.out.println("Game Closed.");
                         break;
-                    } else if(commands[0].toUpperCase().equals("R")){
+                    } else if (commands[0].toUpperCase().equals("R")) {
                         System.out.println();
                         System.out.println("Restart game.");
                         CoreController.restartGame();
@@ -67,7 +66,7 @@ public class CLI {
                 try {
                     sourceColumn = Integer.parseInt(commands[0]);
                 } catch (NumberFormatException ex) {
-                    System.out.println("Source column not exists.");
+                    System.out.println("Invalid column selection.");
                     cli.pause();
                     continue;
                 }
@@ -90,7 +89,7 @@ public class CLI {
                             destinationPile = 3;
                             break;
                         default:
-                            System.out.println("Invalid pile destination.");
+                            System.out.println("Invalid pile selection.");
                             cli.pause();
                             continue;
                     }
@@ -98,10 +97,11 @@ public class CLI {
                 }
 
                 if (sourceColumn >= 1 && sourceColumn <= 9) {
+
                     //search card //conversion from user input to card obj
-                    for (Card cards : CoreController.getCardCollections()) {
-                        if ((cards.getPile() + cards.getSuit()).toUpperCase().equals(commands[1].toUpperCase())) {
-                            cardObj = cards;
+                    for (Card listCard : CoreController.getCardCollections()) {
+                        if ((listCard.getPile() + listCard.getSuit()).toUpperCase().equals(commands[1].toUpperCase())) {
+                            cardObj = listCard;
                             break;
                         }
                     }
@@ -109,13 +109,13 @@ public class CLI {
                     //after card found
                     if (cardObj != null) {
                         if (!CoreController.getColumnList().get(sourceColumn - 1).contains(cardObj)) {
-                            System.out.println("Card "+ commands[1] +" does not exists in source column " + sourceColumn);
+                            System.out.println("Card " + commands[1] + " does not exists in source column " + sourceColumn);
                             cli.pause();
                             continue;
                         }
 
                     } else {
-                        System.out.println("Card not exists.");
+                        System.out.println("Selected card does not exist.");
                         cli.pause();
                         continue;
                     }
@@ -153,9 +153,10 @@ public class CLI {
             System.out.println();
         }
 
-        if(CoreController.isGameFinished()){
+        if (CoreController.isGameFinished()) {
             cli.printPiles();
             cli.printColumns();
+            System.out.println("CONGRATULATIONS YOU WON!!!");
         }
 
     }
@@ -165,8 +166,8 @@ public class CLI {
         ArrayList<String> tempArray = new ArrayList<>();
         int columnNum = 1;
         for (ArrayList<Card> list : CoreController.getColumnList()) {
-            for (Card cards : list) {
-                tempArray.add(cards.getPile() + cards.getSuit());
+            for (Card listCard : list) {
+                tempArray.add(listCard.getPile() + listCard.getSuit());
             }
             System.out.println("Column " + columnNum + ": " + tempArray);
             columnNum++;
@@ -195,8 +196,8 @@ public class CLI {
             if (pile.isEmpty()) {
                 System.out.println("Pile " + pileName + ": []");
             } else {
-                for (Card cards : pile) {
-                    tempArray.add(cards.getPile() + cards.getSuit());
+                for (Card listCard : pile) {
+                    tempArray.add(listCard.getPile() + listCard.getSuit());
                 }
                 System.out.println("Pile " + pileName + ": " + tempArray);
                 tempArray.clear();
@@ -205,12 +206,12 @@ public class CLI {
 
     }
 
-    public void pause(){
+    public void pause() {
 
         System.out.println("\nPRESS ENTER KEY TO CONTINUE...");
         int dump;
         try {
-           dump =  System.in.read();
+            dump = System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
