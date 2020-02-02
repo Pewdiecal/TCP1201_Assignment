@@ -149,7 +149,7 @@ public class CLI {
 
 
                 } else {
-                    System.out.println("Card not exists.");
+                    System.out.println("Invalid source column selection.");
                     cli.pause();
                 }
 
