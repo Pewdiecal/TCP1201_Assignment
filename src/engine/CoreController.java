@@ -3,6 +3,7 @@ package engine;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class CoreController {
 
@@ -213,6 +214,24 @@ public class CoreController {
     public static boolean isGameFinished() {
 
         return c1.isEmpty() && c2.isEmpty() && c3.isEmpty() && c4.isEmpty() && c5.isEmpty() && c6.isEmpty() && c7.isEmpty() && c8.isEmpty() && c9.isEmpty();
+    }
+
+    public static void restartGame(){
+        for(ArrayList<Card> columns:getColumnList()){
+            columns.clear();
+        }
+        for(Stack<Card> pile:OrderedStack.getListOfPiles()){
+            pile.clear();
+        }
+        positionRec.clear();
+        cardCollections.clear();
+        createCards();
+        Collections.shuffle(c9);
+        distributeCards();
+    }
+
+    public static void autoSolve(){
+        
     }
 
 }
