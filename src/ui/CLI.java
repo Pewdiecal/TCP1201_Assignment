@@ -7,6 +7,7 @@ import engine.RuleViolationException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -25,6 +26,8 @@ public class CLI {
 
             cli.printPiles();
             cli.printColumns();
+            System.out.println();
+            System.out.print("COMMAND > ");
 
             inputRaw = in.nextLine();
             commands = inputRaw.split(" ");
@@ -35,9 +38,23 @@ public class CLI {
                 try {
                     columnNum = Integer.parseInt(commands[0]);
                 } catch (NumberFormatException ex) {
-                    System.out.println("Invalid column input.");
-                    cli.pause();
-                    continue;
+
+                    if (commands[0].toUpperCase().equals("X")) {
+                        System.out.println();
+                        System.out.println("Game Closed.");
+                        break;
+                    } else if(commands[0].toUpperCase().equals("R")){
+                        System.out.println();
+                        System.out.println("Restart game.");
+                        CoreController.restartGame();
+                        cli.pause();
+                        continue;
+                    } else {
+                        System.out.println("Invalid column input.");
+                        cli.pause();
+                        continue;
+                    }
+
                 }
                 CoreController.swapCard(CoreController.getColumnList().get(columnNum - 1));
 
@@ -131,11 +148,15 @@ public class CLI {
                 System.out.println("Invalid command");
                 cli.pause();
             }
-
+            System.out.println();
+            System.out.println();
+            System.out.println();
         }
 
-        cli.printPiles();
-        cli.printColumns();
+        if(CoreController.isGameFinished()){
+            cli.printPiles();
+            cli.printColumns();
+        }
 
     }
 
