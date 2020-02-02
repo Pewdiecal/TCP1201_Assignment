@@ -222,12 +222,10 @@ public class CLI {
     private void pause() {
 
         System.out.println("\nPRESS ENTER KEY TO CONTINUE...");
-        int dump;
-        try {
-            dump = System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String dump;
+        Scanner in = new Scanner(System.in);
+        dump = in.nextLine();
+
     }
 
 }
